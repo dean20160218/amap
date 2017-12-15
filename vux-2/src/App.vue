@@ -3,7 +3,7 @@
         <loading v-model="isLoading"></loading>
         <router-view class="router-view"></router-view>
         <tabbar style="position: fixed">
-            <tabbar-item selected link="/Amap">
+            <tabbar-item selected link="/">
                 <img slot="icon" src="./styles/jeemu/icon/history_1.png">
                 <span slot="label">首页</span>
             </tabbar-item>
@@ -11,7 +11,7 @@
                 <img slot="icon">
                 <span slot="label">活动</span>
             </tabbar-item>
-            <tabbar-item badge="2" link="/">
+            <tabbar-item badge="2" link="/form">
                 <img slot="icon" >
                 <span slot="label">我</span>
             </tabbar-item>

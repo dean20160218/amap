@@ -3,7 +3,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import FastClick from 'fastclick'
-import AMap from 'vue-amap'
+// import AMap from 'vue-amap'
+
 // import VueRouter from 'vue-router'
 import App from './App'
 // import Home from './components/HelloFromVux'
@@ -24,11 +25,13 @@ import { AjaxPlugin, WechatPlugin } from 'vux'
  */
 Vue.use(AjaxPlugin)
 Vue.use(WechatPlugin)
-Vue.use(AMap)
+// Vue.use(AMap)
+/*
 AMap.initAMapApiLoader({
   key: 'b9163fde27dc5d66906d413a84942298',
   plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geolocation']
 })
+*/
 
 Vue.use(Vuex)
 const store = new Vuex.Store({}) // 这里你可能已经有其他 module

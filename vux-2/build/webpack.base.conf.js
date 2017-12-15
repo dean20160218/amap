@@ -75,6 +75,9 @@ let webpackConfig = {
         }
       }
     ]
+  },
+  externals: {
+    'AMap': 'window.AMap'
   }
 }
 
