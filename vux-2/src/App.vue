@@ -2,8 +2,8 @@
     <div id="app">
         <loading v-model="isLoading"></loading>
         <router-view class="router-view"></router-view>
-        <tabbar style="position: fixed">
-            <tabbar-item selected link="/">
+        <tabbar style="position: fixed" v-show="tabbarShow">
+            <tabbar-item selected link="/" :selected="$route.path === '/'">
                 <img slot="icon" src="./styles/jeemu/icon/history_1.png">
                 <span slot="label">首页</span>
             </tabbar-item>
@@ -28,6 +28,7 @@
     data () {
       return {
         http: this.$http
+        // tabbarShow: true
       }
     },
     components: {
@@ -62,7 +63,18 @@
     computed: {
       ...mapState({
         isLoading: state => state.jeemu.isLoading
-      })
+      }),
+      tabbarShow () {
+        let notPath = ['form', '/login']
+        let i = notPath.length
+        while (i--) {
+          let temp = new RegExp(notPath[i])
+          if (temp.test(this.$route.path)) {
+            return false
+          }
+        }
+        return true
+      }
     }
   }
 </script>

@@ -6,10 +6,11 @@
 
 <script>
   import AMap from 'AMap'
+  import Request from '../request/main'
   export default {
     data () {
       return {
-        map: { }
+        map: {}
       }
     },
     mounted: function () {
@@ -58,6 +59,33 @@
         let than = this
         let bound = than.map.getBounds()
         console.log(bound)
+        Request.get('/home/addr/addr', {
+          min_lng: bound.southwest.lng,
+          min_lat: bound.southwest.lat,
+          max_lng: bound.northeast.lng,
+          max_lat: bound.northeast.lat
+        }).then(function (response) {
+          let data = Request.handleRespons(response, than)
+          // console.log(data)
+          data.forEach(function (item) {
+            console.log(item)
+            let marker = new AMap.Marker({
+              map: than.map,
+              // icon: './gaode/images/mark_0.png',
+              position: [item.gaode_lng, item.gaode_lat],
+              title: item.id + '-',
+              extData: item.id
+              // clickable:true
+            })
+            AMap.event.addListener(marker, 'click', function (e, s) {
+              console.log(e.target)
+              console.log(s)
+              than.$router.push({path: '/act', query: {id: 1}})
+            })
+          })
+        }).catch(function (error) {
+          console.log(error)
+        })
       }
     }
   }

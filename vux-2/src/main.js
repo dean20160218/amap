@@ -9,8 +9,7 @@ import FastClick from 'fastclick'
 import App from './App'
 // import Home from './components/HelloFromVux'
 import router from './router/index'
-import { AjaxPlugin, WechatPlugin } from 'vux'
-
+import { AjaxPlugin, WechatPlugin, ToastPlugin } from 'vux'
 // Vue.use(VueRouter)
 
 /*
@@ -25,6 +24,7 @@ import { AjaxPlugin, WechatPlugin } from 'vux'
  */
 Vue.use(AjaxPlugin)
 Vue.use(WechatPlugin)
+Vue.use(ToastPlugin)
 // Vue.use(AMap)
 /*
 AMap.initAMapApiLoader({
