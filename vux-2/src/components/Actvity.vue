@@ -24,16 +24,7 @@
     },
     data () {
       return {
-        list: [{
-          title: '洗颜新潮流！人气洁面皂排行榜',
-          img: 'https://cdn.xiaotaojiang.com/uploads/82/1572ec37969ee263735262dc017975/_.jpg'
-        }, {
-          title: '美容用品 & 日用品（上）',
-          img: 'https://cdn.xiaotaojiang.com/uploads/59/b22e0e62363a4a652f28630b3233b9/_.jpg'
-        }, {
-          title: '远离车内毒气，日本车载空气净化器精选',
-          img: 'http://n2-q.mafengwo.net/s10/M00/AF/8B/wKgBZ1h5gpCAANq8AAJzqrujmc815.jpeg?imageView2%2F2%2Fw%2F600%2Fh%2F600%2Fq%2F90'
-        }],
+        title: 'test',
         list1: []
       }
     },
@@ -42,6 +33,8 @@
       than.getList(1).then(function (respons) {
         than.list1 = respons.data.data
       })
+      this.initParent()
+      // console.log(this.$parent.title = '活动')
     },
     methods: {
       getList (pageNum, pageSize = 10) {
@@ -53,6 +46,18 @@
             pageMum: pageNum
           }
         })
+      },
+      initParent () {
+        // this.$parent.isShowHeader = true
+        this.$parent.headerTitle = '活动'
+        this.$parent.actionsheetMenus = {
+          business: '商务合作',
+          share: '分享朋友圈',
+          test: '测试'
+        }
+        this.$parent.clickActionsheet = function (e) {
+         // alert(e)
+        }
       }
     }
   }

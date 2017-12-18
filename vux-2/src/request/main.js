@@ -2,7 +2,7 @@
  * Created by JeemuZhou on 2017/12/14.
  */
 import {AjaxPlugin} from 'vux'
-let baseUrl = 'https://www.yaf.com'
+let baseUrl = 'https://172.20.155.27/'
 export default {
   init (response) {
     if (response.data.status === 302) {

@@ -1,17 +1,38 @@
 <template>
+    <sticky style="position: absolute;top: 0px;height: 100%">
     <div>
+        <search
+                :results="searchResults"
+                v-model="searchValue"
+                position="absolute"
+                @on-submit="searchSubmit"
+                @on-change="searchChange"
+                @result-click="resultClick"
+                @on-cancel="searchCancel"
+                ref="search"></search>
         <div id="map-container" tabindex="0"></div>
     </div>
+        </sticky>
 </template>
 
 <script>
+  import { Search, Sticky } from 'vux'
   import AMap from 'AMap'
   import Request from '../request/main'
   export default {
+    components: {
+      Search,
+      Sticky
+    },
     data () {
       return {
-        map: {}
+        map: {},
+        searchValue: '',
+        searchResults: []
       }
+    },
+    created: function () {
+      this.initParent()
     },
     mounted: function () {
       this.initMap()
@@ -29,8 +50,8 @@
         than.map.plugin('AMap.Geolocation', function () {
           let geolocation = new AMap.Geolocation({
             enableHighAccuracy: true, // 是否使用高精度定位，默认:true
-            timeout: 10000,          // 超过10秒后停止定位，默认：无穷大
-            maximumAge: 0,           // 定位结果缓存0毫秒，默认：0
+            timeout: 20,          // 超过10秒后停止定位，默认：无穷大
+            maximumAge: 1000 * 60,           // 定位结果缓存0毫秒，默认：0
             convert: true,           // 自动偏移坐标，偏移后的坐标为高德坐标，默认：true
             showButton: true,        // 显示定位按钮，默认：true
             buttonPosition: 'LB',    // 定位按钮停靠位置，默认：'LB'，左下角
@@ -86,6 +107,25 @@
         }).catch(function (error) {
           console.log(error)
         })
+      },
+      searchSubmit () {
+        this.searchValue = ''
+        console.log(1)
+      },
+      searchChange (e) {
+        this.searchResults = []
+        this.searchResults.push({title: e + '人物'})
+        this.searchResults.push({title: e + '位置'})
+      },
+      resultClick (e) {
+        this.searchValue = ''
+        console.log(e)
+      },
+      searchCancel () {
+        this.searchValue = ''
+      },
+      initParent () {
+        // this.$parent.bodyPaddingTop = '0px'
       }
     }
   }
@@ -94,7 +134,7 @@
     #map-container {
         height: 100%;
         width: 100%;
-        bottom: 53px;
+        bottom: 51px;
         position: absolute;
         /*
         overflow: auto;

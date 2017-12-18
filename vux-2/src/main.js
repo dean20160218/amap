@@ -35,14 +35,22 @@ AMap.initAMapApiLoader({
 
 Vue.use(Vuex)
 const store = new Vuex.Store({}) // 这里你可能已经有其他 module
-
 store.registerModule('jeemu', { // 名字自己定义
   state: {
     isLoading: false
   },
   mutations: {
     updateLoadingStatus (state, payload) {
-      state.isLoading = payload.isLoading
+      if (!payload.isLoading) {
+        setTimeout(
+          function () {
+            state.isLoading = payload.isLoading
+            // console.log(2)
+          }, 1000
+        )
+      } else {
+        state.isLoading = payload.isLoading
+      }
     }
   }
 })
@@ -57,7 +65,7 @@ router.afterEach(function (to) {
 
 FastClick.attach(document.body)
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 
 /* eslint-disable no-new */
 new Vue({

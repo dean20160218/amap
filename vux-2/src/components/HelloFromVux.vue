@@ -6,6 +6,19 @@
     </div>
     <group title="cell demo">
       <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell> <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell> <cell title="VUX" value="cool" is-link></cell> <cell title="VUX" value="cool" is-link></cell>
+      <cell title="VUX" value="cool" is-link></cell>
+
+
+
+
     </group>
   </div>
 </template>
