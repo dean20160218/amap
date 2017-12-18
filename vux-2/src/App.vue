@@ -100,7 +100,7 @@
         isLoading: state => state.jeemu.isLoading
       }),
       tabbarShow () {
-        let notPath = ['/forms', '/login']
+        let notPath = ['/register', '/login']
         let i = notPath.length
         while (i--) {
           let temp = new RegExp(notPath[i])
