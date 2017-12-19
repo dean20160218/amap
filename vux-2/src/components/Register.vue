@@ -5,8 +5,7 @@
             <h1></h1>
         </div>
         <group class="weui-cells_form">
-            <x-input placeholder="手机号" is-type="china-mobile" type="tel" v-model="phone" ref="refPhone"
-                     mask="999 9999 9999" required></x-input>
+            <x-input placeholder="手机号" is-type="china-mobile" type="tel" v-model="phone" ref="refPhone" :required="true"></x-input>
             <x-input placeholder="密码(6-18位)" :min="6" :max="18" type="password" v-model="password" ref="refPassword"
                      :required="true"></x-input>
             <x-input placeholder="验证码" type="number" :min="6" :max="6" class="weui-vcode" v-model="code" ref="refCode"
@@ -24,12 +23,13 @@
             </x-button>
         </box>
         <box gap="0px 10px">
-            <p>已有账号?</p>
+            <router-link :to="{ path: '/login'}"><p>已有账号?去登录...</p></router-link>
         </box>
     </div>
 </template>
 <script>
   import {Group, Box, XInput, XButton, Countdown} from 'vux'
+  import requsetHandle from '../request/main'
   export default {
     components: {
       Group,
@@ -54,14 +54,26 @@
     },
     methods: {
       sendCode () {
-        if (!this.$refs.refPhone.valid) {
+        let _this = this
+        if (this.phone === '' || !this.$refs.refPhone.valid) {
           this.$refs.refPhone.focus()
+          this.$vux.toast.text('请正确填写手机号', 'bottom')
           return
         }
-        this.sendCodeDis = true
-        this.sendCodeText = '秒后重发'
-        this.startTime = true
-        this.showTime = true
+        requsetHandle.get('/home/sms/send', {phone: this.phone}).then(function (response) {
+          response = requsetHandle.handleRespons(response, _this)
+          if (response.status === 1) {
+            _this.sendCodeDis = true
+            _this.sendCodeText = '秒后重发'
+            _this.startTime = true
+            _this.showTime = true
+          } else {
+            _this.$vux.toast.text(response.info)
+          }
+        }).catch(function (error) {
+          console.log(error)
+          requsetHandle.handleError(error, _this)
+        })
       },
       register (e) {
         console.log(e)

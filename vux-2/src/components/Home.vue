@@ -134,7 +134,7 @@
     #map-container {
         height: 100%;
         width: 100%;
-        bottom: 51px;
+        bottom: 50px;
         position: absolute;
         /*
         overflow: auto;
