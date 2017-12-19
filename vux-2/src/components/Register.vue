@@ -71,12 +71,32 @@
             _this.$vux.toast.text(response.info)
           }
         }).catch(function (error) {
-          console.log(error)
           requsetHandle.handleError(error, _this)
         })
       },
       register (e) {
-        console.log(e)
+        let _this = this
+        if (this.phone === '' || !this.$refs.refPhone.valid) {
+          this.$refs.refPhone.focus()
+          this.$vux.toast.text('请正确填写手机号', 'bottom')
+          return
+        }
+        if (this.password === '' || !this.$refs.refPassword.valid) {
+          this.$refs.refPassword.focus()
+          this.$vux.toast.text('请正确填写密码', 'bottom')
+          return
+        }
+        if (this.code === '' || !this.$refs.refCode.valid) {
+          this.$refs.refCode.focus()
+          this.$vux.toast.text('请正确填写验证码', 'bottom')
+          return
+        }
+        requsetHandle.post('/home/user/register', {phone: this.phone, password: this.password, code: this.code}).then(function (response) {
+          response = requsetHandle.handleRespons(response, _this)
+          console.log(response)
+        }).catch(function (error) {
+          requsetHandle.handleError(error, _this)
+        })
       },
       finishTime () {
         this.sendCodeDis = false

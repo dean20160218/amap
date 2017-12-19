@@ -2,7 +2,7 @@
  * Created by JeemuZhou on 2017/12/14.
  */
 import {AjaxPlugin} from 'vux'
-let baseUrl = 'https://172.20.155.27'
+let baseUrl = 'https://www.shiji.com'
 export default {
   handleRespons (response, Vue) {
     let data = response.data
@@ -34,6 +34,14 @@ export default {
       method: 'GET',
       url: baseUrl + url,
       params: param
+    })
+  },
+  post (url, data = {}, param = {}) {
+    return AjaxPlugin.$http({
+      method: 'POST',
+      url: baseUrl + url,
+      params: param,
+      data: data
     })
   },
   handleError (error, Vue) {
