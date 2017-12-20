@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import FastClick from 'fastclick'
-// import AMap from 'vue-amap'
+import Client from './main/client'
 
 // import VueRouter from 'vue-router'
 import App from './App'
@@ -27,17 +27,20 @@ Vue.use(WechatPlugin)
 Vue.use(ToastPlugin)
 // Vue.use(AMap)
 /*
-AMap.initAMapApiLoader({
-  key: 'b9163fde27dc5d66906d413a84942298',
-  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geolocation']
-})
-*/
+ AMap.initAMapApiLoader({
+ key: 'b9163fde27dc5d66906d413a84942298',
+ plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geolocation']
+ })
+ */
 
 Vue.use(Vuex)
 const store = new Vuex.Store({}) // 这里你可能已经有其他 module
 store.registerModule('jeemu', { // 名字自己定义
   state: {
-    isLoading: false
+    isLoading: false,
+    isWechat: Client.isWechat(),
+    isIos: Client.isIos(),
+    isAndroid: Client.isAndroid()
   },
   mutations: {
     updateLoadingStatus (state, payload) {
@@ -60,6 +63,26 @@ router.beforeEach(function (to, from, next) {
 })
 
 router.afterEach(function (to) {
+  /*
+  if (store.state.jeemu.isWechat && store.state.jeemu.isIos) {
+    document.setTitle = function (t) {
+      document.title = t
+      var i = document.createElement('iframe')
+      i.src = '/favicon.ico'
+      i.style.display = 'none'
+      i.onload = function () {
+        setTimeout(function () {
+          i.remove()
+        }, 9)
+      }
+    }
+    console.log('wechar')
+    document.body.appendChild(to.name + ' - 史迹')
+  } else {
+    document.title = to.name + ' - 史迹'
+  }
+  */
+  document.title = to.name + ' - 史迹'
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 

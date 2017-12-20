@@ -12,22 +12,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: '首页',
       component: Home
     },
     {
       path: '/Form',
-      name: 'Form',
+      name: '表单',
       component: From
     },
     {
       path: '/register',
-      name: 'register',
+      name: '注册',
       component: Register
     },
     {
       path: '/act',
-      name: 'Act',
+      name: '活动',
       component: Act
     }
   ]

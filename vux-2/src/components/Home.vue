@@ -88,7 +88,7 @@
         }).then(function (response) {
           let data = Request.handleRespons(response, than)
           // console.log(data)
-          data.forEach(function (item) {
+          data.data.forEach(function (item) {
             console.log(item)
             let marker = new AMap.Marker({
               map: than.map,
