@@ -80,7 +80,7 @@
         let than = this
         let bound = than.map.getBounds()
         console.log(bound)
-        Request.get('/home/addr/addr', {
+        Request.get('/api/addr/addr', {
           min_lng: bound.southwest.lng,
           min_lat: bound.southwest.lat,
           max_lng: bound.northeast.lng,

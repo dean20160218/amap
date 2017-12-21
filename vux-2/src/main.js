@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import FastClick from 'fastclick'
 import Client from './main/client'
+import User from './main/user'
 
 // import VueRouter from 'vue-router'
 import App from './App'
@@ -40,7 +41,8 @@ store.registerModule('jeemu', { // 名字自己定义
     isLoading: false,
     isWechat: Client.isWechat(),
     isIos: Client.isIos(),
-    isAndroid: Client.isAndroid()
+    isAndroid: Client.isAndroid(),
+    isLogin: false
   },
   mutations: {
     updateLoadingStatus (state, payload) {
@@ -54,10 +56,37 @@ store.registerModule('jeemu', { // 名字自己定义
       } else {
         state.isLoading = payload.isLoading
       }
+    },
+    updateIsLoginStatus (state, login) {
+      state.isLogin = login.isLogin
+    }
+  },
+  actions: {
+    checkLogin (context) {
+      User.isLogin().then(function (response) {
+        if (response.data.data[0]) {
+          context.commit('updateIsLoginStatus', {isLogin: true})
+        }
+      })
     }
   }
 })
+store.dispatch('checkLogin')
+
 router.beforeEach(function (to, from, next) {
+  if (store.state.jeemu.isLogin === false) {
+    if (User.isLoginPath(to.path)) {
+      User.getLoginUrl(store.state.jeemu.isWechat).then(function (response) {
+        if (response.data.data.type === 'push') {
+          router.push(response.data.data.url)
+        } else {
+          window.location.href = response.data.data.url
+          // router.go(response.data.data.url)
+        }
+      })
+      return
+    }
+  }
   store.commit('updateLoadingStatus', {isLoading: true})
   next()
 })
