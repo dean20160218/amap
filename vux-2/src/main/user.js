@@ -9,7 +9,7 @@ export default {
   isLogin () {
     return requestHande.get('/api/user/isLogin')
   },
-  getLoginUrl (isWechat) {
+  getLoginUrl (isWechat, path) {
     return requestHande.get('/api/user/getLoginUrl', {isWechat: isWechat})
   },
   isLoginPath (path) {
