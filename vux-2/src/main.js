@@ -74,9 +74,10 @@ store.registerModule('jeemu', { // 名字自己定义
 store.dispatch('checkLogin')
 
 router.beforeEach(function (to, from, next) {
+  console.log(to.path)
   if (store.state.jeemu.isLogin === false) {
     if (User.isLoginPath(to.path)) {
-      User.getLoginUrl(store.state.jeemu.isWechat).then(function (response) {
+      User.getLoginUrl(store.state.jeemu.isWechat, to.path).then(function (response) {
         if (response.data.data.type === 'push') {
           router.push(response.data.data.url)
         } else {
