@@ -2,12 +2,21 @@
  * Created by JeemuZhou on 2017/12/14.
  */
 import {AjaxPlugin} from 'vux'
+// AjaxPlugin.defaults.withCredentials = true
 let baseUrl = 'https://www.shiji.com'
 export default {
   handleRespons (response, Vue) {
     let data = response.data
     if (data.status === 302) {
-      Vue.$router.push({path: data.data[0]})
+      this.get('/api/user/getLoginUrl', {path: Vue.$route.path}).then(function (response) {
+        if (response.data.data.type === 'push') {
+          // console.log(response.data)
+          Vue.$router.push(response.data.data.url)
+        } else {
+          window.location.href = response.data.data.url
+          // router.go(response.data.data.url)
+        }
+      })
       return false
     } else if (data.status === 1) {
       return data
@@ -33,7 +42,8 @@ export default {
     return AjaxPlugin.$http({
       method: 'GET',
       url: baseUrl + url,
-      params: param
+      params: param,
+      withCredentials: false
     })
   },
   post (url, data = {}, param = {}) {
@@ -41,7 +51,8 @@ export default {
       method: 'POST',
       url: baseUrl + url,
       params: param,
-      data: data
+      data: data,
+      withCredentials: false
     })
   },
   handleError (error, Vue) {

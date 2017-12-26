@@ -25,7 +25,7 @@
 
 <script>
 import { Group, Cell } from 'vux'
-
+import Request from '../request/main'
 export default {
   components: {
     Group,
@@ -38,6 +38,20 @@ export default {
       // preserves its current state and we are modifying
       // its initial state.
       msg: 'Hello World!'
+    }
+  },
+  mounted: function () {
+    this.init()
+  },
+  methods: {
+    init () {
+      let _this = this
+      Request.get('/api/user/loginUrl').then(function (response) {
+        let data = Request.handleRespons(response, _this)
+        console.log(data)
+      }).catch(function (error) {
+        Request.handleError(error, _this)
+      })
     }
   }
 }

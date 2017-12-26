@@ -41,8 +41,7 @@ store.registerModule('jeemu', { // 名字自己定义
     isLoading: false,
     isWechat: Client.isWechat(),
     isIos: Client.isIos(),
-    isAndroid: Client.isAndroid(),
-    isLogin: false
+    isAndroid: Client.isAndroid()
   },
   mutations: {
     updateLoadingStatus (state, payload) {
@@ -71,23 +70,31 @@ store.registerModule('jeemu', { // 名字自己定义
     }
   }
 })
-store.dispatch('checkLogin')
 
 router.beforeEach(function (to, from, next) {
-  console.log(to.path)
+  /*
   if (store.state.jeemu.isLogin === false) {
     if (User.isLoginPath(to.path)) {
-      User.getLoginUrl(store.state.jeemu.isWechat, to.path).then(function (response) {
-        if (response.data.data.type === 'push') {
-          router.push(response.data.data.url)
+      User.isLogin().then(function (response) {
+        if (response.data.data[0] === false) {
+          User.getLoginUrl(store.state.jeemu.isWechat, to.path).then(function (response) {
+            if (response.data.data.type === 'push') {
+              router.push(response.data.data.url)
+            } else {
+              window.location.href = response.data.data.url
+              // router.go(response.data.data.url)
+            }
+          })
         } else {
-          window.location.href = response.data.data.url
-          // router.go(response.data.data.url)
+          store.commit('updateIsLoginStatus', {isLogin: true})
+          store.commit('updateLoadingStatus', {isLoading: true})
+          next()
         }
       })
-      return
     }
+    return
   }
+  */
   store.commit('updateLoadingStatus', {isLoading: true})
   next()
 })
