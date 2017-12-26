@@ -10,7 +10,7 @@ import User from './main/user'
 import App from './App'
 // import Home from './components/HelloFromVux'
 import router from './router/index'
-import { AjaxPlugin, WechatPlugin, ToastPlugin } from 'vux'
+import { AjaxPlugin, WechatPlugin, ToastPlugin, ConfirmPlugin } from 'vux'
 // Vue.use(VueRouter)
 
 /*
@@ -26,6 +26,7 @@ import { AjaxPlugin, WechatPlugin, ToastPlugin } from 'vux'
 Vue.use(AjaxPlugin)
 Vue.use(WechatPlugin)
 Vue.use(ToastPlugin)
+Vue.use(ConfirmPlugin)
 // Vue.use(AMap)
 /*
  AMap.initAMapApiLoader({

@@ -60,7 +60,7 @@
           this.$vux.toast.text('请正确填写手机号', 'bottom')
           return
         }
-        requsetHandle.get('/home/sms/send', {phone: this.phone}).then(function (response) {
+        requsetHandle.get('/api/sms/send', {phone: this.phone}).then(function (response) {
           response = requsetHandle.handleRespons(response, _this)
           if (response.status === 1) {
             _this.sendCodeDis = true
@@ -74,7 +74,8 @@
           requsetHandle.handleError(error, _this)
         })
       },
-      register (e) {
+      register () {
+        console.log(this.$route.query)
         let _this = this
         if (this.phone === '' || !this.$refs.refPhone.valid) {
           this.$refs.refPhone.focus()
@@ -91,9 +92,12 @@
           this.$vux.toast.text('请正确填写验证码', 'bottom')
           return
         }
-        requsetHandle.post('/home/user/register', {phone: this.phone, password: this.password, code: this.code}).then(function (response) {
+        requsetHandle.post('/api/user/register', {a: 'a', phone: this.phone, password: this.password, code: this.code}).then(function (response) {
           response = requsetHandle.handleRespons(response, _this)
-          console.log(response)
+          if (response.status === 1) {
+            console.log(response)
+             _this.$router.push(_this.$route.query.path?)
+          }
         }).catch(function (error) {
           requsetHandle.handleError(error, _this)
         })

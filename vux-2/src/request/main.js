@@ -10,8 +10,24 @@ export default {
     if (data.status === 302) {
       this.get('/api/user/getLoginUrl', {path: Vue.$route.path}).then(function (response) {
         if (response.data.data.type === 'push') {
-          // console.log(response.data)
-          Vue.$router.push(response.data.data.url)
+          Vue.$vux.confirm.show({
+            title: '提示',
+            content: '前去登录?',
+            theme: 'android',
+            onShow () {
+              // console.log('plugin show')
+            },
+            onHide () {
+              // console.log('plugin hide')
+            },
+            onCancel () {
+              console.log('plugin cancel')
+            },
+            onConfirm () {
+              Vue.$router.push(response.data.data.url)
+            }
+          })
+          //
         } else {
           window.location.href = response.data.data.url
           // router.go(response.data.data.url)
@@ -24,7 +40,7 @@ export default {
       Vue.$vux.toast.show({
         type: 'warn',
         position: 'top',
-        text: data.info
+        text: data.msg
       })
       return false
     } else if (data.status === 0) {
@@ -43,7 +59,7 @@ export default {
       method: 'GET',
       url: baseUrl + url,
       params: param,
-      withCredentials: false
+      withCredentials: true
     })
   },
   post (url, data = {}, param = {}) {
@@ -52,7 +68,7 @@ export default {
       url: baseUrl + url,
       params: param,
       data: data,
-      withCredentials: false
+      withCredentials: true
     })
   },
   handleError (error, Vue) {
