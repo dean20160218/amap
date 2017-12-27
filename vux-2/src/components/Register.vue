@@ -5,7 +5,8 @@
             <h1></h1>
         </div>
         <group class="weui-cells_form">
-            <x-input placeholder="手机号" is-type="china-mobile" type="tel" v-model="phone" ref="refPhone" :required="true"></x-input>
+            <x-input placeholder="手机号" is-type="china-mobile" type="tel" v-model="phone" ref="refPhone"
+                     :required="true"></x-input>
             <x-input placeholder="密码(6-18位)" :min="6" :max="18" type="password" v-model="password" ref="refPassword"
                      :required="true"></x-input>
             <x-input placeholder="验证码" type="number" :min="6" :max="6" class="weui-vcode" v-model="code" ref="refCode"
@@ -15,11 +16,13 @@
                     <countdown v-model="timeSendCode" :start="startTime" @on-finish="finishTime"
                                v-show="showTime"></countdown>
                     {{sendCodeText}}
+
                 </x-button>
             </x-input>
         </group>
         <box gap="20px 10px">
-            <x-button :gradients="['#4b4b4b', '#7d7d7d']" :show-loading="showRegister" @click.native="register">注册
+            <x-button :gradients="['#4b4b4b', '#7d7d7d']" :disabled="registerDis" :show-loading="showRegister" @click.native="register">注册
+
             </x-button>
         </box>
         <box gap="0px 10px">
@@ -28,7 +31,7 @@
     </div>
 </template>
 <script>
-  import {Group, Box, XInput, XButton, Countdown} from 'vux'
+  import { Group, Box, XInput, XButton, Countdown } from 'vux'
   import requsetHandle from '../request/main'
   export default {
     components: {
@@ -44,10 +47,11 @@
         password: '',
         code: '',
         showRegister: false,
+        registerDis: false,
         showCode: false,
         sendCodeText: '发送验证码',
         sendCodeDis: false,
-        timeSendCode: 5,
+        timeSendCode: 60,
         startTime: false,
         showTime: false
       }
@@ -75,7 +79,6 @@
         })
       },
       register () {
-        console.log(this.$route.query)
         let _this = this
         if (this.phone === '' || !this.$refs.refPhone.valid) {
           this.$refs.refPhone.focus()
@@ -92,22 +95,36 @@
           this.$vux.toast.text('请正确填写验证码', 'bottom')
           return
         }
-        requsetHandle.post('/api/user/register', {a: 'a', phone: this.phone, password: this.password, code: this.code}).then(function (response) {
+        _this.startRegister()
+        requsetHandle.post('/api/user/register', {
+          phone: this.phone,
+          password: this.password,
+          code: this.code
+        }).then(function (response) {
+          _this.endRegister()
           response = requsetHandle.handleRespons(response, _this)
           if (response.status === 1) {
-            console.log(response)
-             _this.$router.push(_this.$route.query.path?)
+            _this.$router.push(_this.$route.query.path ? _this.$route.query.path : '/')
           }
         }).catch(function (error) {
+          _this.endRegister()
           requsetHandle.handleError(error, _this)
         })
       },
       finishTime () {
         this.sendCodeDis = false
         this.sendCodeText = '发送验证码'
-        this.timeSendCode = 5
+        this.timeSendCode = 60
         this.startTime = false
         this.showTime = false
+      },
+      startRegister () {
+        this.showRegister = true
+        this.registerDis = true
+      },
+      endRegister () {
+        this.showRegister = false
+        this.registerDis = false
       }
     }
 
