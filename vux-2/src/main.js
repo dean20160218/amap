@@ -43,7 +43,17 @@ store.registerModule('jeemu', { // 名字自己定义
     isLoading: false,
     isWechat: Client.isWechat(),
     isIos: Client.isIos(),
-    isAndroid: Client.isAndroid()
+    isAndroid: Client.isAndroid(),
+    headerData: {
+      headerTitle: '史迹',
+      actionsheetMenus: {
+        'business': '商务合作',
+        'share': '分享到朋友圈'
+      },
+      clickActionsheet: function (e) {
+        console.log(e)
+      }
+    }
   },
   mutations: {
     updateLoadingStatus (state, payload) {

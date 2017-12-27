@@ -5,7 +5,8 @@ import From from '../components/HelloFromVux.vue'
 // import Amap from '../components/Amap.vue'
 import Act from '../components/Actvity.vue'
 import Register from '../components/Register.vue'
-import Login from '../components/Login.vue'
+// import Login from '../components/Login.vue'
+import Me from '../components/Me.vue'
 
 Vue.use(Router)
 
@@ -26,15 +27,22 @@ export default new Router({
       name: '注册',
       component: Register
     },
+    /*
     {
       path: '/login',
-      name: '注册',
+      name: '登录',
       component: Login
     },
+    */
     {
       path: '/act',
       name: '活动',
       component: Act
+    },
+    {
+      path: '/me',
+      name: '我',
+      component: Me
     }
   ]
 })

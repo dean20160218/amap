@@ -2,21 +2,21 @@
     <div>
         <div style="margin: 10px;overflow: hidden;" v-for="item in list1">
             <router-link :to="{ path: '/', params: { userId: 123 }}">
-            <masker style="border-radius: 2px;">
-                <div class="m-img" :style="{backgroundImage: 'url(' + item.bg_img + ')'}"></div>
-                <div slot="content" class="m-title">
-                    {{item.name}}
-                    <br/>
-                    <span class="m-time">{{item.start_time}}-{{item.end_time}}</span>
-                </div>
-            </masker>
+                <masker style="border-radius: 2px;">
+                    <div class="m-img" :style="{backgroundImage: 'url(' + item.bg_img + ')'}"></div>
+                    <div slot="content" class="m-title">
+                        {{item.name}}
+                        <br/>
+                        <span class="m-time">{{item.start_time}}-{{item.end_time}}</span>
+                    </div>
+                </masker>
             </router-link>
-    </div>
+        </div>
     </div>
 </template>
 
 <script>
-  import { XButton, Masker } from 'vux'
+  import {XButton, Masker} from 'vux'
   export default {
     components: {
       XButton,
@@ -25,39 +25,31 @@
     data () {
       return {
         title: 'test',
-        list1: []
+        list1: [1, 2]
       }
     },
     created: function () {
-      let than = this
-      than.getList(1).then(function (respons) {
-        than.list1 = respons.data.data
-      })
-      this.initParent()
+      // this.initHeader()
       // console.log(this.$parent.title = '活动')
     },
+    mounted () {
+      this.initHeader()
+    },
     methods: {
-      getList (pageNum, pageSize = 10) {
-        return this.$http({
-          method: 'get',
-          url: 'https://www.yaf.com',
-          params: {
-            pageSize: pageSize,
-            pageMum: pageNum
+      initHeader () {
+        let e = {
+          headerTitle: '活动',
+          actionsheetMenus: {
+            business: '商务合作',
+            share: '分享朋友圈',
+            test: '测试'
+          },
+          clickActionsheet: function (e) {
+            alert(e)
           }
-        })
-      },
-      initParent () {
-        // this.$parent.isShowHeader = true
-        this.$parent.headerTitle = '活动'
-        this.$parent.actionsheetMenus = {
-          business: '商务合作',
-          share: '分享朋友圈',
-          test: '测试'
         }
-        this.$parent.clickActionsheet = function (e) {
-         // alert(e)
-        }
+        console.log(e)
+        this.$emit('changeHeader', e)
       }
     }
   }

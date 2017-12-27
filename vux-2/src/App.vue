@@ -22,7 +22,7 @@
                 <img slot="icon">
                 <span slot="label">活动</span>
             </tabbar-item>
-            <tabbar-item badge="2" link="/form">
+            <tabbar-item badge="2" link="/me">
                 <img slot="icon" >
                 <span slot="label">我</span>
             </tabbar-item>
@@ -133,7 +133,16 @@
       },
       clickActionsheet (e) {
         console.log(e)
+      },
+      updateHeader () {
+        console.log(1234)
+        this.headerTitle = 111
+        // this.actionsheetMenus = e.actionsheetMenus
+        // this.clickActionsheet = e.clickActionsheet
       }
+    },
+    created: function () {
+      this.updateHeader()
     },
     mounted: function () {
       if (this.$store.state.jeemu.isWechat) {
@@ -156,7 +165,7 @@
         return true
       },
       headerShow () {
-        let showPath = ['/act', '/my']
+        let showPath = ['/act', '/me']
         let i = showPath.length
         while (i--) {
           let temp = new RegExp(showPath[i])
