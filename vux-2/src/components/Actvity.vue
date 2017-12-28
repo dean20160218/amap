@@ -43,13 +43,9 @@
             business: '商务合作',
             share: '分享朋友圈',
             test: '测试'
-          },
-          clickActionsheet: function (e) {
-            alert(e)
           }
         }
-        console.log(e)
-        this.$emit('changeHeader', e)
+        this.$parent.$emit('changeHeader', e)
       }
     }
   }

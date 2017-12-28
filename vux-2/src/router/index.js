@@ -7,6 +7,7 @@ import Act from '../components/Actvity.vue'
 import Register from '../components/Register.vue'
 // import Login from '../components/Login.vue'
 import Me from '../components/Me.vue'
+import Feedback from '../components/Feedback.vue'
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ export default new Router({
       path: '/me',
       name: '我',
       component: Me
+    },
+    {
+      path: '/feedback',
+      name: '意见反馈',
+      component: Feedback
     }
   ]
 })

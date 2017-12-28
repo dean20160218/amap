@@ -28,14 +28,9 @@ Vue.use(WechatPlugin)
 Vue.use(ToastPlugin)
 Vue.use(ConfirmPlugin)
 Vue.use(AlertPlugin)
-// Vue.use(AMap)
-/*
- AMap.initAMapApiLoader({
- key: 'b9163fde27dc5d66906d413a84942298',
- plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geolocation']
- })
- */
-
+Vue.prototype.client = {
+  version: '1.0.0'
+}
 Vue.use(Vuex)
 const store = new Vuex.Store({}) // 这里你可能已经有其他 module
 store.registerModule('jeemu', { // 名字自己定义
@@ -43,17 +38,7 @@ store.registerModule('jeemu', { // 名字自己定义
     isLoading: false,
     isWechat: Client.isWechat(),
     isIos: Client.isIos(),
-    isAndroid: Client.isAndroid(),
-    headerData: {
-      headerTitle: '史迹',
-      actionsheetMenus: {
-        'business': '商务合作',
-        'share': '分享到朋友圈'
-      },
-      clickActionsheet: function (e) {
-        console.log(e)
-      }
-    }
+    isAndroid: Client.isAndroid()
   },
   mutations: {
     updateLoadingStatus (state, payload) {

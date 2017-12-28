@@ -8,7 +8,7 @@
          <actionsheet :menus="actionsheetMenus" :show-cancel="true" v-model="showActionsheet" @on-click-menu="clickActionsheet"></actionsheet>
         </div>
 
-        <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
+        <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px" v-on:changeHeader="updateHeader" >
             <x-header v-show="headerShow" :left-options="{showBack: isShowBack}" :right-options="{showMore: isShowMore}" @on-click-more="headerMore" style="width:100%;position:absolute;left:0;top:0;z-index:100;">{{headerTitle}}</x-header>
             <transition>
             <router-view class="router-view"></router-view>
@@ -133,16 +133,30 @@
       },
       clickActionsheet (e) {
         console.log(e)
+        if (e === 'feedback') {
+          this.$router.push('/feedback')
+        }
       },
-      updateHeader () {
-        console.log(1234)
-        this.headerTitle = 111
-        // this.actionsheetMenus = e.actionsheetMenus
-        // this.clickActionsheet = e.clickActionsheet
+      updateHeader (e) {
+        if (e.headerTitle) {
+          this.headerTitle = e.headerTitle
+        }
+        if (e.actionsheetMenus) {
+          this.actionsheetMenus = e.actionsheetMenus
+        }
+        if (e.clickActionsheet) {
+          this.clickActionsheet = e.clickActionsheet
+        }
+        if (e.isShowBack !== undefined) {
+          this.isShowBack = e.isShowBack
+        }
+        if (e.isShowMore !== undefined) {
+          this.isShowMore = e.isShowMore
+        }
       }
     },
     created: function () {
-      this.updateHeader()
+      // console.log(this.client)
     },
     mounted: function () {
       if (this.$store.state.jeemu.isWechat) {
@@ -154,7 +168,7 @@
         isLoading: state => state.jeemu.isLoading
       }),
       tabbarShow () {
-        let notPath = ['/register', '/login']
+        let notPath = ['/register', '/login', '/feedback']
         let i = notPath.length
         while (i--) {
           let temp = new RegExp(notPath[i])
@@ -165,7 +179,7 @@
         return true
       },
       headerShow () {
-        let showPath = ['/act', '/me']
+        let showPath = ['/act', '/me', '/feedback']
         let i = showPath.length
         while (i--) {
           let temp = new RegExp(showPath[i])
