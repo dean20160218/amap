@@ -7,19 +7,20 @@
         <group>
             <x-input placeholder="说明"></x-input>
             <x-textarea :max="200" name="description" placeholder="详细描述"></x-textarea>
-            <uploader
-                    :max="uploadImgMax"
-                    :images="uploadImgs"
-                    :handle-click="false"
-                    :show-header="true"
-                    :showTip="true"
-                    :readonly="false"
-                    :upload-url="uploadImgUrl"
-                    :params="uploadImgParams"
-                    size="small"
-                    @preview="previewMethod"
-                    @add-image="addImageMethod"
-                    @remove-image="removeImageMethod"
+            <uploader title="上传图片" size="small" ref="input"
+                      :max="uploadImgMax"
+                      :images="uploadImgs"
+                      :handle-click="false"
+                      :show-header="true"
+                      :showTip="true"
+                      :readonly="false"
+                      :upload-url="uploadImgUrl"
+                      :params="uploadImgParams"
+                      :autoUpload="false"
+                      @preview="previewMethod"
+                      @add-image="addImageMethod"
+                      @remove-image="removeImageMethod"
+                      @upload-image="uploadImg"
             ></uploader>
         </group>
         <group>
@@ -30,6 +31,7 @@
 <script>
   import { XTextarea, Group, XInput } from 'vux'
   import Uploader from 'vux-uploader'
+  import requsetHandle from '../request/main'
   export default {
     data () {
       return {
@@ -49,6 +51,18 @@
       this.initHeader()
     },
     methods: {
+      uploadImg (data) {
+        let _this = this
+        requsetHandle.post('/api/file/uploadImg', data).then(function (response) {
+          let data = requsetHandle.handleRespons(response, _this)
+          if (data.status === 1) {
+            _this.$refs.input.value = ''
+            _this.uploadImgs.push(response.data.data)
+          }
+        }).catch(function (error) {
+          requsetHandle.handleError(error, _this)
+        })
+      },
       previewMethod () {
         // ss
       },
