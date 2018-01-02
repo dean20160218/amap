@@ -8,6 +8,7 @@ import Register from '../components/Register.vue'
 // import Login from '../components/Login.vue'
 import Me from '../components/Me.vue'
 import Feedback from '../components/Feedback.vue'
+import Img from '../components/Img.vue'
 
 Vue.use(Router)
 
@@ -49,6 +50,11 @@ export default new Router({
       path: '/feedback',
       name: '意见反馈',
       component: Feedback
+    },
+    {
+      path: '/img',
+      name: '详情',
+      component: Img
     }
   ]
 })

@@ -179,7 +179,7 @@
         return true
       },
       headerShow () {
-        let showPath = ['/act', '/me', '/feedback']
+        let showPath = ['/act', '/me', '/feedback', '/img']
         let i = showPath.length
         while (i--) {
           let temp = new RegExp(showPath[i])
