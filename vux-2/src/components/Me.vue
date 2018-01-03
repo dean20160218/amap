@@ -9,7 +9,7 @@
                     :max-file-size="5242880"
                     url="https://www.shiji.com/api/file/uploadImg">
                 <p class="center">
-                    <x-img :src="userInfo.headImg" :default-src="userInfo.headImg" error-class="error-loading-img"></x-img>
+                    <x-img :src="userInfo.headImg"  error-class="error-loading-img"></x-img>
                 </p>
             </vue-core-image-upload>
             <div class="center">
