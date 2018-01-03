@@ -195,6 +195,7 @@
 
 <style lang="less">
     @import './styles/reset.less';
+    @import './styles/my.less';
     html, body {
         height: 100%;
         width: 100%;
