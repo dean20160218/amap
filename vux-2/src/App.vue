@@ -179,15 +179,15 @@
         return true
       },
       headerShow () {
-        let showPath = ['/act', '/me', '/feedback', '/img']
+        let showPath = ['/asss']
         let i = showPath.length
         while (i--) {
           let temp = new RegExp(showPath[i])
           if (temp.test(this.$route.path)) {
-            return true
+            return false
           }
         }
-        return false
+        return true
       }
     }
   }

@@ -9,6 +9,7 @@ import Login from '../components/Login.vue'
 import Me from '../components/Me.vue'
 import Feedback from '../components/Feedback.vue'
 import Img from '../components/Img.vue'
+import Card from '../components/Card.vue'
 
 Vue.use(Router)
 
@@ -53,6 +54,11 @@ export default new Router({
       path: '/img',
       name: '详情',
       component: Img
+    },
+    {
+      path: '/card',
+      name: '首页1',
+      component: Card
     }
   ]
 })
