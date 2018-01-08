@@ -5,10 +5,40 @@
         <div v-transfer-dom>
             <previewer :list="previewerList" ref="previewer" :options="options"></previewer>
         </div>
+        <group gutter="0px">
+            <cell title="名称XXX" value="作者XXX"></cell>
+            <cell-form-preview :list="list"></cell-form-preview>
+        </group>
+        <group gutter="0px">
+            <cell title="得分">
+                <rater v-model="scoreData" :disabled="true" star="☻" active-color="#FF9900" :margin="4"></rater>
+            </cell>
+        </group>
+        <group gutter="0px">
+            <panel :list="commentList" type="5"></panel>
+        </group>
+        <div v-transfer-dom>
+            <popup v-model="showComment" height="370px" is-transparent>
+                <div style="width: 95%;background-color:#fff;height:350px;margin:0 auto;border-radius:5px;padding-top:10px;">
+                    <group>
+                        <cell>
+                            <x-textarea :max="200" name="comment" placeholder="输入评论"></x-textarea>
+                        </cell>
+                        <cell title="评分">
+                            <rater v-model="scoreData" :disabled="false" star="☻" active-color="#FF9900" :margin="4"></rater>
+                        </cell>
+                    </group>
+                    <div style="padding:20px 15px;">
+                        <x-button type="primary">提交</x-button>
+                        <x-button @click.native="showComment = false">取消</x-button>
+                    </div>
+                </div>
+            </popup>
+        </div>
     </div>
 </template>
 <script>
-  import { Swiper, SwiperItem, XButton, Previewer, TransferDom } from 'vux'
+  import { Swiper, SwiperItem, XButton, Previewer, TransferDom, Group, Cell, CellFormPreview, Rater, Popup, XTextarea, Panel } from 'vux'
   export default {
     directives: {
       TransferDom
@@ -17,7 +47,14 @@
       Swiper,
       SwiperItem,
       XButton,
-      Previewer
+      Previewer,
+      Group,
+      Cell,
+      CellFormPreview,
+      Rater,
+      Popup,
+      XTextarea,
+      Panel
     },
     data () {
       return {
@@ -36,11 +73,45 @@
             },
             {id: 'download', label: 'Download image', url: '{{raw_image_url}}', download: true}
           ]
-        }
+        },
+        list: [{
+          label: '尺寸',
+          value: '3.29 * 253'
+        }, {
+          label: 'Banana',
+          value: '1.04'
+        }, {
+          label: 'Fish',
+          value: '8.00'
+        }],
+        scoreData: 4,
+        showComment: false,
+        commentList: [{
+          src: 'http://somedomain.somdomain/x.jpg',
+          fallbackSrc: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
+          title: '标题一',
+          desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。',
+          url: '/component/cell'
+        }, {
+          src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
+          title: '标题二',
+          desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。',
+          url: {
+            path: '/component/radio',
+            replace: false
+          },
+          meta: {
+            source: '来源信息',
+            date: '时间',
+            other: '其他信息'
+          }
+        }]
       }
     },
     mounted () {
       this.getImgList()
+      console.log(this.$route.query.id)
+      console.log(this.$route.query.dd)
     },
     methods: {
       getImgList () {
