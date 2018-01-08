@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../components/Home.vue'
+// import Home from '../components/Home.vue'
 import From from '../components/HelloFromVux.vue'
 // import Amap from '../components/Amap.vue'
 import Act from '../components/Actvity.vue'
@@ -18,7 +18,7 @@ export default new Router({
     {
       path: '/',
       name: '首页',
-      component: Home
+      component: Card
     },
     {
       path: '/Form',

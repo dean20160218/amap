@@ -1,65 +1,57 @@
 <template>
     <div>
-        <card :header="header" :footer="link" >
-            <img slot="header" src="http://placeholder.qiniudn.com/640x300" style="width:100%;display:block;">
+        <p style="text-align:center;" v-show="loading">
+            <br>
+            <span style="vertical-align:middle;display:inline-block;font-size:14px;">加载中&nbsp;&nbsp;</span><inline-loading></inline-loading>
+        </p>
+        <div v-for="value in oil_list">
+        <card :header="{title: value.name}" :footer="{title: '查看详情', link: '/img?id='+value.id}" >
+            <img slot="header" v-bind:src="value.head_img_url" style="width:100%;display:block;">
             <div slot="content" class="card-padding">
-                <p style="color:#999;font-size:12px;">Posted on January 21, 2015</p>
-                <p style="font-size:14px;line-height:1.2;">Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit..</p>
+                <p style="color:#999;font-size:12px;">{{value.author}} - {{value.publish_time}}</p>
+                <p style="font-size:14px;line-height:1.2;">{{value.content}}</p>
             </div>
         </card>
         <divider>--</divider>
-        <card>
-            <img slot="header" src="http://placeholder.qiniudn.com/640x300" style="width:100%;display:block;">
-            <div slot="content" class="card-padding">
-                <p style="color:#999;font-size:12px;">Posted on January 21, 2015</p>
-                <p style="font-size:14px;line-height:1.2;">Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit..</p>
-            </div>
-        </card>
+        </div>
     </div>
 </template>
 <script>
-  import { Divider, Card } from 'vux'
+  import { Divider, Card, InlineLoading } from 'vux'
+  import requsetHandle from '../request/main'
   export default {
     directives: {
       // TransferDom
     },
     components: {
       Divider,
-      Card
+      Card,
+      InlineLoading
     },
     data () {
       return {
         link: {title: '查看详情', link: '/img?id=22'},
-        header: {title: '美剧就是'}
+        loading: false,
+        oil_list: []
       }
     },
     mounted () {
-      this.getImgList()
+      this.getOilList()
     },
     methods: {
-      getImgList () {
-        this.img_list = [{
-          img: 'https://static.vux.li/demo/1.jpg',
-          title: '送你一朵fua'
-        }, {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/2.jpg',
-          title: '送你一辆车'
-        }, {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/5.jpg',
-          title: '送你一次旅行',
-          fallbackImg: 'https://static.vux.li/demo/3.jpg'
-        }]
-        this.previewerList = [
-          {
-            src: 'https://static.vux.li/demo/1.jpg',
-            title: '标题<br>ff',
-            author: 'woziji'
-          },
-          {src: 'https://static.vux.li/demo/2.jpg'},
-          {src: 'https://static.vux.li/demo/3.jpg'}
-        ]
+      getOilList () {
+        let _this = this
+        _this.showLoading()
+        requsetHandle.get('/api/oil/list').then(function (response) {
+          _this.hideLoading()
+          let data = requsetHandle.handleRespons(response, _this)
+          if (data.status === 1) {
+            _this.oil_list = data.data
+          }
+        }).catch(function (error) {
+          _this.hideLoading()
+          requsetHandle.handleError(error, _this)
+        })
       },
       changeImg (index) {
         console.log(index)
@@ -67,6 +59,12 @@
       clickImg () {
         console.log(this.imgIndex)
         this.$refs.previewer.show(this.imgIndex)
+      },
+      showLoading () {
+        this.loading = true
+      },
+      hideLoading () {
+        this.loading = false
       }
     }
   }
