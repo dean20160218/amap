@@ -10,7 +10,7 @@
             <cell-form-preview :list="list"></cell-form-preview>
         </group>
         <group gutter="0px">
-            <cell title="得分">
+            <cell title="评分" @click.native="handleRates">
                 <rater v-model="scoreData" :disabled="true" star="☻" active-color="#FF9900" :margin="4"></rater>
             </cell>
         </group>
@@ -18,14 +18,11 @@
             <panel :list="commentList" type="5"></panel>
         </group>
         <div v-transfer-dom>
-            <popup v-model="showComment" height="370px" is-transparent>
-                <div style="width: 95%;background-color:#fff;height:350px;margin:0 auto;border-radius:5px;padding-top:10px;">
+            <popup v-model="showComment" height="310px" is-transparent>
+                <div style="width: 95%;background-color:#fff;height:290px;margin:0 auto;border-radius:5px;padding-top:10px;">
                     <group>
                         <cell>
                             <x-textarea :max="200" name="comment" placeholder="输入评论"></x-textarea>
-                        </cell>
-                        <cell title="评分">
-                            <rater v-model="scoreData" :disabled="false" star="☻" active-color="#FF9900" :margin="4"></rater>
                         </cell>
                     </group>
                     <div style="padding:20px 15px;">
@@ -35,10 +32,36 @@
                 </div>
             </popup>
         </div>
+        <div v-transfer-dom>
+            <popup v-model="showRates" height="220px" is-transparent>
+                <div style="width: 95%;background-color:#fff;height:200px;margin:0 auto;border-radius:5px;padding-top:10px;">
+                    <group>
+                        <cell title="评分">
+                            <rater v-model="scoreData" :disabled="false" star="☻" active-color="#FF9900" :margin="4"></rater>
+                        </cell>
+                    </group>
+                    <div style="padding:20px 15px;">
+                        <x-button type="primary">提交</x-button>
+                        <x-button @click.native="showRates = false">取消</x-button>
+                    </div>
+                </div>
+            </popup>
+        </div>
+        <tabbar style="position: fixed" v-show="true">
+            <tabbar-item>
+                <span slot="label">收藏</span>
+            </tabbar-item>
+            <tabbar-item show-dot>
+                <span slot="label">评论</span>
+            </tabbar-item>
+            <tabbar-item badge="2" style="background-color: #4c4242" @click.native="clickHao">
+                <span slot="label" style="font-size:16px;color: white">嚎起来</span>
+            </tabbar-item>
+        </tabbar>
     </div>
 </template>
 <script>
-  import { Swiper, SwiperItem, XButton, Previewer, TransferDom, Group, Cell, CellFormPreview, Rater, Popup, XTextarea, Panel } from 'vux'
+  import { Swiper, SwiperItem, XButton, Previewer, TransferDom, Group, Cell, CellFormPreview, Rater, Popup, XTextarea, Panel, Tabbar, TabbarItem } from 'vux'
   export default {
     directives: {
       TransferDom
@@ -54,7 +77,9 @@
       Rater,
       Popup,
       XTextarea,
-      Panel
+      Panel,
+      Tabbar,
+      TabbarItem
     },
     data () {
       return {
@@ -85,7 +110,8 @@
           value: '8.00'
         }],
         scoreData: 4,
-        showComment: false,
+        showComment: true,
+        showRates: false,
         commentList: [{
           src: 'http://somedomain.somdomain/x.jpg',
           fallbackSrc: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
@@ -144,6 +170,16 @@
       clickImg () {
         console.log(this.imgIndex)
         this.$refs.previewer.show(this.imgIndex)
+      },
+      handleRates () {
+        this.showRates = true
+      },
+      clickHao () {
+        this.actionsheetMenus = {
+          'buy': '购买',
+          'copy': '高仿'
+        }
+        this.showActionsheet = true
       }
     }
   }

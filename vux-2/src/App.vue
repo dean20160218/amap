@@ -57,6 +57,17 @@
           'business': '商务合作',
           'share': '分享到朋友圈'
         },
+        defaultActionsheetData: {
+          actionsheetMenus: {
+            'business': '商务合作',
+            'share': '分享到朋友圈'
+          },
+          isShowBack: false,
+          isShowMore: true,
+          clickActionsheet: function (e) {
+            console.log(e)
+          }
+        },
         showActionsheet: false,
         bodyPaddingTop: '46px'
         // tabbarShow: true
@@ -126,6 +137,7 @@
         })
       },
       headerMore () {
+        this.updateHeader({})
         this.showActionsheet = true
       },
       onClickingMask () {
@@ -140,18 +152,28 @@
       updateHeader (e) {
         if (e.headerTitle) {
           this.headerTitle = e.headerTitle
+        } else {
+          this.headerTitle = this.defaultActionsheetData.headerTitle
         }
         if (e.actionsheetMenus) {
           this.actionsheetMenus = e.actionsheetMenus
+        } else {
+          this.actionsheetMenus = this.defaultActionsheetData.actionsheetMenus
         }
         if (e.clickActionsheet) {
           this.clickActionsheet = e.clickActionsheet
+        } else {
+          this.clickActionsheet = this.defaultActionsheetData.clickActionsheet
         }
         if (e.isShowBack !== undefined) {
           this.isShowBack = e.isShowBack
+        } else {
+          this.isShowBack = this.defaultActionsheetData.isShowBack
         }
         if (e.isShowMore !== undefined) {
           this.isShowMore = e.isShowMore
+        } else {
+          this.isShowMore = this.defaultActionsheetData.isShowMore
         }
       }
     },
@@ -168,7 +190,7 @@
         isLoading: state => state.jeemu.isLoading
       }),
       tabbarShow () {
-        let notPath = ['/register', '/login', '/feedback']
+        let notPath = ['/register', '/login', '/feedback', '/img']
         let i = notPath.length
         while (i--) {
           let temp = new RegExp(notPath[i])
