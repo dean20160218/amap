@@ -62,6 +62,7 @@
             'business': '商务合作',
             'share': '分享到朋友圈'
           },
+          headerTitle: '首页',
           isShowBack: false,
           isShowMore: true,
           clickActionsheet: function (e) {
@@ -137,7 +138,6 @@
         })
       },
       headerMore () {
-        this.updateHeader({})
         this.showActionsheet = true
       },
       onClickingMask () {
@@ -209,6 +209,7 @@
             return false
           }
         }
+        this.updateHeader({})
         return true
       }
     }

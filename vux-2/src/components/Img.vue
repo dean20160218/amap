@@ -37,7 +37,8 @@
                 <div style="width: 95%;background-color:#fff;height:200px;margin:0 auto;border-radius:5px;padding-top:10px;">
                     <group>
                         <cell title="评分">
-                            <rater v-model="scoreData" :disabled="false" star="☻" active-color="#FF9900" :margin="4"></rater>
+                            <rater v-model="scoreData" :disabled="false" star="☻" active-color="#FF9900"
+                                   :margin="4"></rater>
                         </cell>
                     </group>
                     <div style="padding:20px 15px;">
@@ -48,20 +49,39 @@
             </popup>
         </div>
         <tabbar style="position: fixed" v-show="true">
-            <tabbar-item>
+            <tabbar-item @click.native="clickFocus">
+                <img slot="icon"
+                     :src="this.static.resHost + (isFocus?'/static/images/icon/focus_1.png':'/static/images/icon/focus_0.png')">
                 <span slot="label">收藏</span>
             </tabbar-item>
-            <tabbar-item show-dot>
+            <tabbar-item @click.native="clickComment">
                 <span slot="label">评论</span>
             </tabbar-item>
-            <tabbar-item badge="2" style="background-color: #4c4242" @click.native="clickHao">
-                <span slot="label" style="font-size:16px;color: white">嚎起来</span>
+            <tabbar-item style="background-color: #4c4242" @click.native="clickHao">
+                <span slot="label" style="font-size:16px;color: white">我喜欢？</span>
             </tabbar-item>
         </tabbar>
+        <actionsheet v-model="showHao" :menus="haoMenus" show-cancel @on-click-menu="handleClickHao"></actionsheet>
     </div>
 </template>
 <script>
-  import { Swiper, SwiperItem, XButton, Previewer, TransferDom, Group, Cell, CellFormPreview, Rater, Popup, XTextarea, Panel, Tabbar, TabbarItem } from 'vux'
+  import {
+    Swiper,
+    SwiperItem,
+    XButton,
+    Previewer,
+    TransferDom,
+    Group,
+    Cell,
+    CellFormPreview,
+    Rater,
+    Popup,
+    XTextarea,
+    Panel,
+    Tabbar,
+    TabbarItem,
+    Actionsheet
+  } from 'vux'
   export default {
     directives: {
       TransferDom
@@ -79,7 +99,8 @@
       XTextarea,
       Panel,
       Tabbar,
-      TabbarItem
+      TabbarItem,
+      Actionsheet
     },
     data () {
       return {
@@ -110,8 +131,9 @@
           value: '8.00'
         }],
         scoreData: 4,
-        showComment: true,
+        showComment: false,
         showRates: false,
+        isFocus: false,
         commentList: [{
           src: 'http://somedomain.somdomain/x.jpg',
           fallbackSrc: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
@@ -131,12 +153,16 @@
             date: '时间',
             other: '其他信息'
           }
-        }]
+        }],
+        canBuy: false,
+        canCopy: true,
+        showHao: false
       }
     },
     mounted () {
       this.getImgList()
-      console.log(this.$route.query.id)
+      this.initHeader()
+      console.log(this.static.resHost)
       console.log(this.$route.query.dd)
     },
     methods: {
@@ -156,7 +182,7 @@
         }]
         this.previewerList = [
           {
-            src: 'https://static.vux.li/demo/1.jpg',
+            src: 'http://res.shiji.com/file/2018/01/08/PilEk/5a5334d864b70.jpg',
             title: '标题<br>ff',
             author: 'woziji'
           },
@@ -175,11 +201,29 @@
         this.showRates = true
       },
       clickHao () {
-        this.actionsheetMenus = {
-          'buy': '购买',
-          'copy': '高仿'
+        this.showHao = true
+      },
+      clickComment () {
+        this.showComment = true
+      },
+      clickFocus () {
+        this.isFocus = !this.isFocus
+        console.log(this.isFocus)
+      },
+      handleClickHao (e) {
+        console.log(e)
+      },
+      initHeader () {
+        let e = {
+          headerTitle: '详情',
+          isShowBack: true
         }
-        this.showActionsheet = true
+        this.$parent.$emit('changeHeader', e)
+      }
+    },
+    computed: {
+      haoMenus () {
+        return [{label: '购买?<br/><span style="color:#666;font-size:12px;">Once deleted, you will never find it.</span>', type: this.canBuy ? 'Default' : 'disabled', value: 'buy'}, {label: '仿制?<br/><span style="color:#666;font-size:12px;">Once deleted, you will never find it.</span>', type: this.canCopy ? 'Default' : 'disabled', value: 'copy'}]
       }
     }
   }

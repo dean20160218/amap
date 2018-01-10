@@ -10,6 +10,7 @@ import User from './main/user'
 import App from './App'
 // import Home from './components/HelloFromVux'
 import router from './router/index'
+import Static from './main/static'
 import { AjaxPlugin, WechatPlugin, ToastPlugin, ConfirmPlugin, AlertPlugin } from 'vux'
 // Vue.use(VueRouter)
 
@@ -31,6 +32,7 @@ Vue.use(AlertPlugin)
 Vue.prototype.client = {
   version: '1.0.0'
 }
+Vue.prototype.static = Static
 Vue.use(Vuex)
 const store = new Vuex.Store({}) // 这里你可能已经有其他 module
 store.registerModule('jeemu', { // 名字自己定义
