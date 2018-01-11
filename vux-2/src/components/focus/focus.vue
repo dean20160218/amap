@@ -26,6 +26,10 @@
       Type: {
         type: String,
         default: 'oil'
+      },
+      isFocus: {
+        type: Boolean,
+        default: false
       }
     },
     data () {
@@ -60,7 +64,7 @@
         requsetHandle.get('/api/focus/isFocus', {target_id: this.targetId, type: this.Type}).then(function (response) {
           let data = requsetHandle.handleRespons(response, _this)
           if (data.status === 1) {
-            _this.isFocusBool = data.data[0]
+            // _this.isFocus = data.data[0]
             _this.$emit('focusResult', data.data[0])
           }
         }).catch(function (error) {
