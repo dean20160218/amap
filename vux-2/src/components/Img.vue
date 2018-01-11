@@ -62,6 +62,7 @@
             </tabbar-item>
         </tabbar>
         <actionsheet v-model="showHao" :menus="haoMenus" show-cancel @on-click-menu="handleClickHao"></actionsheet>
+        <jeemu-focus @focusResult="focusResult" :targetId="imgId"></jeemu-focus>
     </div>
 </template>
 <script>
@@ -82,6 +83,7 @@
     TabbarItem,
     Actionsheet
   } from 'vux'
+  import JeemuFocus from './focus/focus.vue'
   export default {
     directives: {
       TransferDom
@@ -100,7 +102,8 @@
       Panel,
       Tabbar,
       TabbarItem,
-      Actionsheet
+      Actionsheet,
+      'jeemu-focus': JeemuFocus
     },
     data () {
       return {
@@ -156,14 +159,13 @@
         }],
         canBuy: false,
         canCopy: true,
-        showHao: false
+        showHao: false,
+        imgId: parseInt(this.$route.query.id)
       }
     },
     mounted () {
       this.getImgList()
       this.initHeader()
-      console.log(this.static.resHost)
-      console.log(this.$route.query.dd)
     },
     methods: {
       getImgList () {
@@ -191,7 +193,7 @@
         ]
       },
       changeImg (index) {
-        console.log(index)
+        // console.log(index)
       },
       clickImg () {
         console.log(this.imgIndex)
@@ -207,8 +209,7 @@
         this.showComment = true
       },
       clickFocus () {
-        this.isFocus = !this.isFocus
-        console.log(this.isFocus)
+        // this.showFocus = !this.showFocus
       },
       handleClickHao (e) {
         console.log(e)
@@ -219,6 +220,13 @@
           isShowBack: true
         }
         this.$parent.$emit('changeHeader', e)
+      },
+      focusResult (e) {
+        if (e) {
+          this.isFocus = true
+        } else {
+          this.isFocus = false
+        }
       }
     },
     computed: {
