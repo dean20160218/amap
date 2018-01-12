@@ -51,7 +51,7 @@
         <tabbar style="position: fixed" v-show="true">
             <tabbar-item @click.native="clickFocus">
                 <img slot="icon"
-                     :src="this.static.resHost + (isFocus?'/static/images/icon/focus_1.png':'/static/images/icon/focus_0.png')">
+                     :src="this.static.resHost + (realFocus?'/static/images/icon/focus_1.png':'/static/images/icon/focus_0.png')">
                 <span slot="label">收藏</span>
             </tabbar-item>
             <tabbar-item @click.native="clickComment">
@@ -62,7 +62,7 @@
             </tabbar-item>
         </tabbar>
         <actionsheet v-model="showHao" :menus="haoMenus" show-cancel @on-click-menu="handleClickHao"></actionsheet>
-        <jeemu-focus @focusResult="focusResult" :targetId="imgId"></jeemu-focus>
+        <jeemu-focus @focusResult="focusResult" :targetId="imgId" :isFocus="isFocus"></jeemu-focus>
     </div>
 </template>
 <script>
@@ -137,6 +137,7 @@
         showComment: false,
         showRates: false,
         isFocus: false,
+        realFocus: false,
         commentList: [{
           src: 'http://somedomain.somdomain/x.jpg',
           fallbackSrc: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
@@ -209,7 +210,7 @@
         this.showComment = true
       },
       clickFocus () {
-        // this.showFocus = !this.showFocus
+        this.isFocus = !this.isFocus
       },
       handleClickHao (e) {
         console.log(e)
@@ -227,6 +228,7 @@
         } else {
           this.isFocus = false
         }
+        this.realFocus = this.isFocus
       }
     },
     computed: {
