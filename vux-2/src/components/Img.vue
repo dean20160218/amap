@@ -210,7 +210,8 @@
         this.showComment = true
       },
       clickFocus () {
-        this.isFocus = !this.isFocus
+        // this.isFocus = !this.isFocus
+        // console.log(this.$children.$emit('isFocusFunction'))
       },
       handleClickHao (e) {
         console.log(e)
