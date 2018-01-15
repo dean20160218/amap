@@ -1,6 +1,7 @@
 <template>
     <div >
-        <x-icon type="ios-heart" size="27"></x-icon>
+        <x-icon v-show="!focus" type="ios-heart-outline" size="27" ></x-icon>
+        <x-icon v-show="focus" type="ios-heart" size="27"></x-icon>
         <group v-show="false">
             <popup-picker :title="title" :data="categoryList" v-model="pickerValue" @on-change="clickList"
                           :placeholder="placeholder" :columns="1" :show="show"></popup-picker>
@@ -48,10 +49,6 @@
       Type: {
         type: String,
         default: 'oil'
-      },
-      isFocus: {
-        type: Boolean,
-        default: false
       }
     },
     data () {
@@ -90,7 +87,7 @@
         }).then(function (response) {
           let data = requsetHandle.handleRespons(response, _this)
           if (data.status === 1) {
-            _this.$emit('focusResult', data.data[0])
+            _this.focus = data.data[0]
           }
         }).catch(function (error) {
           requsetHandle.handleError(error, _this)
@@ -104,8 +101,7 @@
         requsetHandle.get('/api/focus/isFocus', {target_id: this.targetId, type: this.Type}).then(function (response) {
           let data = requsetHandle.handleRespons(response, _this)
           if (data.status === 1) {
-            // _this.isFocusData = data.data[0]
-            _this.$emit('focusResult', data.data[0])
+            _this.focus = data.data[0]
           }
         }).catch(function (error) {
           requsetHandle.handleError(error, _this)
@@ -119,8 +115,7 @@
         requsetHandle.get('/api/focus/focus', {target_id: this.targetId, type: this.Type}).then(function (response) {
           let data = requsetHandle.handleRespons(response, _this)
           if (data.status === 1) {
-            // _this.isFocusData = data.data[0]
-            _this.$emit('focusResult', data.data[0])
+            _this.focus = data.data[0]
           }
         }).catch(function (error) {
           requsetHandle.handleError(error, _this)
@@ -134,13 +129,13 @@
         requsetHandle.get('/api/focus/cancel', {target_id: this.targetId, type: this.Type}).then(function (response) {
           let data = requsetHandle.handleRespons(response, _this)
           if (data.status === 1) {
-            _this.$emit('focusResult', false)
+            _this.focus = false
           }
         }).catch(function (error) {
           requsetHandle.handleError(error, _this)
         })
       },
-      addCategoryFunction (showList = false) {
+      addCategoryFunction () {
         if (this.categoryValue === '') {
           this.$vux.toast.text('请正确填写分类名称', 'bottom')
           return
@@ -150,18 +145,16 @@
         requsetHandle.post('/api/focus/addCategory', {name: _this.categoryValue}).then(function (response) {
           let data = requsetHandle.handleRespons(response, _this)
           if (data.status === 1) {
-            if (showList) {
-              _this.show = true
-            }
             _this.showAdd = false
           }
+          _this.initCategoryList(true)
           _this.endCommit()
         }).catch(function (error) {
           _this.endCommit()
           requsetHandle.handleError(error, _this)
         })
       },
-      initCategoryList () {
+      initCategoryList (showList = false) {
         let _this = this
         requsetHandle.get('/api/focus/getCategoryList').then(function (response) {
           let data = requsetHandle.handleRespons(response, _this)
@@ -170,6 +163,9 @@
             data.data.forEach(function (value) {
               temp.push({name: value.name, value: value.id})
             })
+            if (showList) {
+              _this.show = true
+            }
             _this.categoryList = temp
           }
         }).catch(function (error) {
@@ -183,11 +179,10 @@
       endCommit () {
         this.commitDis = false
         this.commitShowLoading = false
-      }
-    },
-    watch: {
-      isFocus (val, oldval) {
-        if (val) {
+      },
+      updateFocus () {
+        // this.focus = !this.focus
+        if (!this.focus) {
           if (this.categoryList.length !== 0) {
             this.show = true
           } else {
@@ -196,6 +191,11 @@
         } else {
           this.cancelFunction()
         }
+      }
+    },
+    watch: {
+      focus (val, oldval) {
+        console.log(val, oldval)
         // console.log(val, oldval)
         // this.$emit('focusResult', val)
       }

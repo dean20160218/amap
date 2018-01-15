@@ -50,8 +50,7 @@
         </div>
         <tabbar style="position: fixed" v-show="true">
             <tabbar-item @click.native="clickFocus">
-                <img slot="icon"
-                     :src="this.static.resHost + (realFocus?'/static/images/icon/focus_1.png':'/static/images/icon/focus_0.png')">
+                <jeemu-focus  slot="icon" :targetId="imgId" ref="focus"></jeemu-focus>
                 <span slot="label">收藏</span>
             </tabbar-item>
             <tabbar-item @click.native="clickComment">
@@ -62,7 +61,7 @@
             </tabbar-item>
         </tabbar>
         <actionsheet v-model="showHao" :menus="haoMenus" show-cancel @on-click-menu="handleClickHao"></actionsheet>
-        <jeemu-focus @focusResult="focusResult" :targetId="imgId" :isFocus="isFocus"></jeemu-focus>
+
     </div>
 </template>
 <script>
@@ -133,7 +132,7 @@
           label: 'Fish',
           value: '8.00'
         }],
-        scoreData: 4,
+        scoreData: 3.5,
         showComment: false,
         showRates: false,
         isFocus: false,
@@ -211,7 +210,7 @@
       },
       clickFocus () {
         // this.isFocus = !this.isFocus
-        // console.log(this.$children.$emit('isFocusFunction'))
+        this.$refs.focus.updateFocus()
       },
       handleClickHao (e) {
         console.log(e)
