@@ -40,7 +40,8 @@ store.registerModule('jeemu', { // 名字自己定义
     isLoading: false,
     isWechat: Client.isWechat(),
     isIos: Client.isIos(),
-    isAndroid: Client.isAndroid()
+    isAndroid: Client.isAndroid(),
+    isLogin: false
   },
   mutations: {
     updateLoadingStatus (state, payload) {
@@ -69,7 +70,7 @@ store.registerModule('jeemu', { // 名字自己定义
     }
   }
 })
-
+store.dispatch('checkLogin')
 router.beforeEach(function (to, from, next) {
   /*
   if (store.state.jeemu.isLogin === false) {

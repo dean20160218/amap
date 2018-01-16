@@ -12,7 +12,7 @@ export default {
       if (data.data.url) {
         _this.handleRedirect(data, Vue)
       } else {
-        this.get('/api/user/getLoginUrl', {path: Vue.$route.path}).then(function (response) {
+        this.get('/api/user/getLoginUrl', {path: Vue.$route.fullPath}).then(function (response) {
           _this.handleRedirect(response.data, Vue)
         })
       }
@@ -55,6 +55,15 @@ export default {
       withCredentials: true
     })
   },
+  login (Vue, alert = 'alert') {
+    let _this = this
+    this.get('/api/user/getLoginUrl', {path: Vue.$route.fullPath, alert: alert}).then(function (response) {
+      _this.handleRedirect(response.data, Vue)
+    })
+  },
+  isLogin () {
+    return this.get('/api/user/isLogin')
+  },
   handleError (error, Vue) {
     Vue.$vux.toast.show({
       type: 'warn',
@@ -64,7 +73,6 @@ export default {
     })
   },
   handleRedirect (data, Vue) {
-    console.log(data)
     let _this = this
     if (data.data.alert === 'alert') {
       Vue.$vux.alert.show({

@@ -62,6 +62,7 @@
           _this.endLogin()
           response = requsetHandle.handleRespons(response, _this)
           if (response.status === 1) {
+            _this.$store.commit('updateIsLoginStatus', {isLogin: true})
             _this.$router.push(_this.$route.query.path ? _this.$route.query.path : '/')
           }
         }).catch(function (error) {

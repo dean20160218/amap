@@ -3,7 +3,7 @@
         <x-icon v-show="!focus" type="ios-heart-outline" size="27" ></x-icon>
         <x-icon v-show="focus" type="ios-heart" size="27"></x-icon>
         <group v-show="false">
-            <popup-picker :title="title" :data="categoryList" v-model="pickerValue" @on-change="clickList"
+            <popup-picker :title="title" :data="categoryList" v-model="pickerValue" @on-change="clickList" @on-hide="categoryHide"
                           :placeholder="placeholder" :columns="1" :show="show"></popup-picker>
         </group>
         <div v-transfer-dom>
@@ -67,13 +67,20 @@
       }
     },
     mounted: function () {
-      this.isFocusFunction()
-      this.initCategoryList()
+      if (this.$store.state.jeemu.isLogin) {
+        this.isFocusFunction()
+        this.initCategoryList()
+      } else {
+        let _this = this
+        requsetHandle.isLogin().then(function (response) {
+          if (response.data.status === 1 && response.data.data[0] === true) {
+            _this.isFocusFunction()
+            _this.initCategoryList()
+          }
+        })
+      }
     },
     methods: {
-      divClick () {
-        console.log(122)
-      },
       clickList (e) {
         this.show = false
         if (this.targetId === 0) {
@@ -92,6 +99,9 @@
         }).catch(function (error) {
           requsetHandle.handleError(error, _this)
         })
+      },
+      categoryHide () {
+        this.show = false
       },
       isFocusFunction () {
         if (this.targetId === 0) {
@@ -181,7 +191,11 @@
         this.commitShowLoading = false
       },
       updateFocus () {
-        // this.focus = !this.focus
+        if (!this.$store.state.jeemu.isLogin) {
+          requsetHandle.login(this, 'confirm')
+          return
+        }
+        console.log(this.show)
         if (!this.focus) {
           if (this.categoryList.length !== 0) {
             this.show = true

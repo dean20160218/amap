@@ -8,6 +8,7 @@
         <group gutter="0px">
             <cell title="名称XXX" value="作者XXX"></cell>
             <cell-form-preview :list="list"></cell-form-preview>
+            <cell title="" value="查看更多" :is-link="true" @click.native="clickAttributesFunction"></cell>
         </group>
         <group gutter="0px">
             <cell title="评分" @click.native="handleRates">
@@ -36,13 +37,13 @@
             <popup v-model="showRates" height="220px" is-transparent>
                 <div style="width: 95%;background-color:#fff;height:200px;margin:0 auto;border-radius:5px;padding-top:10px;">
                     <group>
-                        <cell title="评分">
-                            <rater v-model="scoreData" :disabled="false" star="☻" active-color="#FF9900"
+                        <cell title="我的评分">
+                            <rater v-model="user_score.score" :disabled="user_score.exist === true" star="☻" active-color="#FF9900"
                                    :margin="4"></rater>
                         </cell>
                     </group>
                     <div style="padding:20px 15px;">
-                        <x-button type="primary">提交</x-button>
+                        <x-button type="primary" :disabled="user_score.exist === true"  :show-loading="score_commit_show_loading" @click.native="submitScoreFunction">{{user_score.exist === true ? '已提交':'提交'}}</x-button>
                         <x-button @click.native="showRates = false">取消</x-button>
                     </div>
                 </div>
@@ -61,7 +62,16 @@
             </tabbar-item>
         </tabbar>
         <actionsheet v-model="showHao" :menus="haoMenus" show-cancel @on-click-menu="handleClickHao"></actionsheet>
-
+        <div v-transfer-dom>
+            <popup v-model="show_attributes" position="bottom" max-height="50%">
+                <group>
+                    <cell v-for="i in 20" :key="i" :title="i"></cell>
+                </group>
+                <div style="padding: 15px;">
+                    <x-button @click.native="show_attributes = false" type="primary">关闭</x-button>
+                </div>
+            </popup>
+        </div>
     </div>
 </template>
 <script>
@@ -83,6 +93,7 @@
     Actionsheet
   } from 'vux'
   import JeemuFocus from './focus/focus.vue'
+  import requsetHandle from '../request/main'
   export default {
     directives: {
       TransferDom
@@ -132,7 +143,7 @@
           label: 'Fish',
           value: '8.00'
         }],
-        scoreData: 3.5,
+        scoreData: 0,
         showComment: false,
         showRates: false,
         isFocus: false,
@@ -160,12 +171,19 @@
         canBuy: false,
         canCopy: true,
         showHao: false,
-        imgId: parseInt(this.$route.query.id)
+        imgId: parseInt(this.$route.query.id),
+        user_score: {
+          score: 0,
+          exist: false
+        },
+        score_commit_show_loading: false,
+        show_attributes: false
       }
     },
     mounted () {
       this.getImgList()
       this.initHeader()
+      this.initOilFunction()
     },
     methods: {
       getImgList () {
@@ -199,6 +217,20 @@
         console.log(this.imgIndex)
         this.$refs.previewer.show(this.imgIndex)
       },
+      initOilFunction () {
+        let _this = this
+        requsetHandle.get('/api/oil/detail', {id: _this.imgId}).then(function (response) {
+          let data = requsetHandle.handleRespons(response, _this)
+          if (data.status === 1) {
+            console.log(data.data.score)
+            _this.scoreData = data.data.score
+            _this.user_score.score = data.data.user_score.score
+            _this.user_score.exist = data.data.user_score.exist
+          }
+        }).catch(function (error) {
+          requsetHandle.handleError(error, _this)
+        })
+      },
       handleRates () {
         this.showRates = true
       },
@@ -229,6 +261,49 @@
           this.isFocus = false
         }
         this.realFocus = this.isFocus
+      },
+      submitScoreFunction () {
+        let _this = this
+        if (_this.user_score.score === 0) {
+          this.$vux.toast.text('评分不能为零哦！', 'bottom')
+          return
+        }
+        _this.startSubmitScore()
+        requsetHandle.post('/api/score/setScore', {oil_id: _this.imgId, score: _this.user_score.score}).then(function (response) {
+          let data = requsetHandle.handleRespons(response, _this)
+          if (data.status === 1) {
+            _this.refreshScoreFuntion()
+          } else {
+            _this.user_score.exist = false
+          }
+          _this.endSubmitScore()
+        }).catch(function (error) {
+          _this.endSubmitScore()
+          _this.user_score.exist = false
+          requsetHandle.handleError(error, _this)
+        })
+      },
+      refreshScoreFuntion () {
+        let _this = this
+        requsetHandle.get('/api/score/getScore', {oil_id: _this.imgId}).then(function (response) {
+          let data = requsetHandle.handleRespons(response, _this)
+          if (data.status === 1) {
+            _this.scoreData = data.data[0]
+          }
+        }).catch(function (error) {
+          requsetHandle.handleError(error, _this)
+        })
+      },
+      startSubmitScore () {
+        this.score_commit_show_loading = true
+        this.user_score.exist = true
+      },
+      endSubmitScore () {
+        this.score_commit_show_loading = false
+        // this.user_score.exist = true
+      },
+      clickAttributesFunction () {
+        this.show_attributes = true
       }
     },
     computed: {
