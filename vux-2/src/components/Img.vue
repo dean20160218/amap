@@ -7,8 +7,8 @@
         </div>
         <group gutter="0px">
             <cell title="名称XXX" value="作者XXX"></cell>
-            <cell-form-preview :list="list"></cell-form-preview>
-            <cell title="" value="查看更多" :is-link="true" @click.native="clickAttributesFunction"></cell>
+            <cell-form-preview :list="attributes_list"></cell-form-preview>
+            <cell title="" value="查看更多" :is-link="true" v-show="more_attributes.length > 3" @click.native="clickAttributesFunction"></cell>
         </group>
         <group gutter="0px">
             <cell title="评分" @click.native="handleRates">
@@ -65,10 +65,10 @@
         <div v-transfer-dom>
             <popup v-model="show_attributes" position="bottom" max-height="50%">
                 <group>
-                    <cell v-for="i in 20" :key="i" :title="i"></cell>
+                    <cell v-for="i in more_attributes" :key="i.key" :value="i.value" :title="i.key"></cell>
                 </group>
                 <div style="padding: 15px;">
-                    <x-button @click.native="show_attributes = false" type="primary">关闭</x-button>
+                    <x-button @click.native="show_attributes = false" :gradients="['#4b4b4b', '#7d7d7d']" type="primary">关闭</x-button>
                 </div>
             </popup>
         </div>
@@ -133,16 +133,7 @@
             {id: 'download', label: 'Download image', url: '{{raw_image_url}}', download: true}
           ]
         },
-        list: [{
-          label: '尺寸',
-          value: '3.29 * 253'
-        }, {
-          label: 'Banana',
-          value: '1.04'
-        }, {
-          label: 'Fish',
-          value: '8.00'
-        }],
+        attributes_list: [],
         scoreData: 0,
         showComment: false,
         showRates: false,
@@ -177,7 +168,8 @@
           exist: false
         },
         score_commit_show_loading: false,
-        show_attributes: false
+        show_attributes: false,
+        more_attributes: []
       }
     },
     mounted () {
@@ -222,10 +214,15 @@
         requsetHandle.get('/api/oil/detail', {id: _this.imgId}).then(function (response) {
           let data = requsetHandle.handleRespons(response, _this)
           if (data.status === 1) {
-            console.log(data.data.score)
             _this.scoreData = data.data.score
             _this.user_score.score = data.data.user_score.score
             _this.user_score.exist = data.data.user_score.exist
+            data.data.attributes.forEach(function (value) {
+              if (_this.attributes_list.length < 3) {
+                _this.attributes_list.push({label: value.key, value: value.value})
+              }
+              _this.more_attributes.push(value)
+            })
           }
         }).catch(function (error) {
           requsetHandle.handleError(error, _this)

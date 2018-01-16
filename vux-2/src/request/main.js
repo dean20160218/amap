@@ -3,7 +3,8 @@
  */
 import { AjaxPlugin } from 'vux'
 // AjaxPlugin.defaults.withCredentials = true
-let baseUrl = 'https://www.shiji.com'
+// let baseUrl = 'https://www.shiji.com'
+let baseUrl = 'http://192.168.2.105'
 export default {
   handleRespons (response, Vue) {
     let _this = this
