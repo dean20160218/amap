@@ -1,6 +1,6 @@
 <template>
     <div>
-        <swiper :list="img_list" class="previewer-demo-img" v-model="imgIndex" @on-index-change="changeImg" :auto="true"
+        <swiper :list="swiper_list" class="previewer-demo-img" v-model="imgIndex" @on-index-change="changeImg" :auto="true"
                 @click.native="clickImg"></swiper>
         <div v-transfer-dom>
             <previewer :list="previewerList" ref="previewer" :options="options"></previewer>
@@ -15,6 +15,7 @@
                 <rater v-model="scoreData" :disabled="true" star="☻" active-color="#FF9900" :margin="4"></rater>
             </cell>
         </group>
+        <jeemu-comment></jeemu-comment>
         <group gutter="0px">
             <panel :list="commentList" type="5"></panel>
         </group>
@@ -93,6 +94,7 @@
     Actionsheet
   } from 'vux'
   import JeemuFocus from './focus/focus.vue'
+  import JeemuComment from './comment/comment.vue'
   import requsetHandle from '../request/main'
   export default {
     directives: {
@@ -113,11 +115,12 @@
       Tabbar,
       TabbarItem,
       Actionsheet,
-      'jeemu-focus': JeemuFocus
+      'jeemu-focus': JeemuFocus,
+      'jeemu-comment': JeemuComment
     },
     data () {
       return {
-        img_list: [],
+        swiper_list: [],
         previewerList: [],
         imgIndex: 0,
         options: {
@@ -179,28 +182,6 @@
     },
     methods: {
       getImgList () {
-        this.img_list = [{
-          img: 'https://static.vux.li/demo/1.jpg',
-          title: '送你一朵fua'
-        }, {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/2.jpg',
-          title: '送你一辆车'
-        }, {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/5.jpg',
-          title: '送你一次旅行',
-          fallbackImg: 'https://static.vux.li/demo/3.jpg'
-        }]
-        this.previewerList = [
-          {
-            src: 'http://res.shiji.com/file/2018/01/08/PilEk/5a5334d864b70.jpg',
-            title: '标题<br>ff',
-            author: 'woziji'
-          },
-          {src: 'https://static.vux.li/demo/2.jpg'},
-          {src: 'https://static.vux.li/demo/3.jpg'}
-        ]
       },
       changeImg (index) {
         // console.log(index)
@@ -223,6 +204,10 @@
               }
               _this.more_attributes.push(value)
             })
+            for (let value in data.data.images) {
+              _this.swiper_list.push({img: data.data.images[value].swiper_url, title: data.data.images[value].title, fallbackImg: _this.static.resHost + '/static/images/error_200x200.svg'})
+              _this.previewerList.push({src: data.data.images[value].previewer_url, title: data.data.images[value].content})
+            }
           }
         }).catch(function (error) {
           requsetHandle.handleError(error, _this)
