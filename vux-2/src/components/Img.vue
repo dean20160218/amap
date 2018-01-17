@@ -15,25 +15,7 @@
                 <rater v-model="scoreData" :disabled="true" star="☻" active-color="#FF9900" :margin="4"></rater>
             </cell>
         </group>
-        <jeemu-comment></jeemu-comment>
-        <group gutter="0px">
-            <panel :list="commentList" type="5"></panel>
-        </group>
-        <div v-transfer-dom>
-            <popup v-model="showComment" height="310px" is-transparent>
-                <div style="width: 95%;background-color:#fff;height:290px;margin:0 auto;border-radius:5px;padding-top:10px;">
-                    <group>
-                        <cell>
-                            <x-textarea :max="200" name="comment" placeholder="输入评论"></x-textarea>
-                        </cell>
-                    </group>
-                    <div style="padding:20px 15px;">
-                        <x-button type="primary">提交</x-button>
-                        <x-button @click.native="showComment = false">取消</x-button>
-                    </div>
-                </div>
-            </popup>
-        </div>
+        <jeemu-comment :target_id="imgId"></jeemu-comment>
         <div v-transfer-dom>
             <popup v-model="showRates" height="220px" is-transparent>
                 <div style="width: 95%;background-color:#fff;height:200px;margin:0 auto;border-radius:5px;padding-top:10px;">
@@ -87,8 +69,6 @@
     CellFormPreview,
     Rater,
     Popup,
-    XTextarea,
-    Panel,
     Tabbar,
     TabbarItem,
     Actionsheet
@@ -110,8 +90,6 @@
       CellFormPreview,
       Rater,
       Popup,
-      XTextarea,
-      Panel,
       Tabbar,
       TabbarItem,
       Actionsheet,
@@ -142,26 +120,6 @@
         showRates: false,
         isFocus: false,
         realFocus: false,
-        commentList: [{
-          src: 'http://somedomain.somdomain/x.jpg',
-          fallbackSrc: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '标题一',
-          desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。',
-          url: '/component/cell'
-        }, {
-          src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '标题二',
-          desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。',
-          url: {
-            path: '/component/radio',
-            replace: false
-          },
-          meta: {
-            source: '来源信息',
-            date: '时间',
-            other: '其他信息'
-          }
-        }],
         canBuy: false,
         canCopy: true,
         showHao: false,
